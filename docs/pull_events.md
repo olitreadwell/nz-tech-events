@@ -4,6 +4,8 @@ How to pull NZ tech events from the community "Events in Aotearoa" Google Sheet,
 
 > This document is duplicated as the "Event Data Pipeline" section of `CLAUDE.md` — if you change one, update the other.
 
+**Weekly shortcut:** run `/pull-events` in Claude Code to do all five steps end to end, including the live upload. The command lives in `.claude/commands/pull-events.md` (gitignored, so it's local to this machine) and adds the lessons from past runs on top of the steps below.
+
 All data lives in `data/` (gitignored, local-only):
 
 | File | What it is |
@@ -97,5 +99,6 @@ TECHEVENTS_API_URL=https://techevents.co.nz/api/v1 TECHEVENTS_API_TOKEN=<token> 
     -d '{"event":{"title":"Corrected Title"}}'
   ```
 
+- `TechEventsID` = `SKIP` means the event was deliberately held back (postponed, cancelled, or dead link); the reason and date checked are in `notes`. The uploader skips any non-blank ID — clear `SKIP` to upload it later.
 - `data/` is gitignored: `events.csv` is the only record of sheet↔site matching. Back it up before risky operations.
 - Tests for the pipeline scripts live in `test/scripts/` and run standalone: `ruby test/scripts/pull_events_test.rb` and `ruby test/scripts/upload_events_test.rb`.
