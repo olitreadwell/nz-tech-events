@@ -3,10 +3,20 @@ require "json"
 require "net/http"
 require "uri"
 
+# CSV to upload: data/events.csv by default, or set EVENTS_CSV (e.g. data/source_events.csv)
+def events_csv_path(env = ENV)
+  env["EVENTS_CSV"] ? File.expand_path(env["EVENTS_CSV"]) : File.expand_path("../data/events.csv", __dir__)
+end
+
+# Failures are logged next to the input, e.g. events.csv -> events_errors.csv
+def errors_csv_path(events_path)
+  events_path.sub(/\.csv\z/, "_errors.csv")
+end
+
 API_BASE = ENV.fetch("TECHEVENTS_API_URL", "http://localhost:3000/api/v1")
 API_TOKEN = ENV.fetch("TECHEVENTS_API_TOKEN") { abort "Error: TECHEVENTS_API_TOKEN env var is required" }
-EVENTS_CSV_PATH = File.expand_path("../data/events.csv", __dir__)
-ERRORS_CSV_PATH = File.expand_path("../data/events_errors.csv", __dir__)
+EVENTS_CSV_PATH = events_csv_path
+ERRORS_CSV_PATH = errors_csv_path(EVENTS_CSV_PATH)
 REQUEST_DELAY = 2 # seconds between requests to stay under 30/min rate limit
 
 CSV_DESCRIPTION_COLUMN = "description_markdown"

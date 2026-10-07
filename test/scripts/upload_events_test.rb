@@ -97,6 +97,21 @@ class BuildEventJsonTest < Minitest::Test
   end
 end
 
+class CsvPathTest < Minitest::Test
+  def test_defaults_to_events_csv
+    assert_equal File.expand_path("../../data/events.csv", __dir__), events_csv_path({})
+  end
+
+  def test_uses_events_csv_env_var
+    assert_equal File.expand_path("data/source_events.csv"), events_csv_path("EVENTS_CSV" => "data/source_events.csv")
+  end
+
+  def test_errors_file_sits_next_to_input_csv
+    assert_equal "/tmp/data/events_errors.csv", errors_csv_path("/tmp/data/events.csv")
+    assert_equal "/tmp/data/source_events_errors.csv", errors_csv_path("/tmp/data/source_events.csv")
+  end
+end
+
 class FormatErrorTest < Minitest::Test
   def test_formats_validation_errors
     body = { "errors" => { "title" => [ "can't be blank" ], "start_date" => [ "can't be blank", "is invalid" ] } }

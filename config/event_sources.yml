@@ -1,0 +1,1230 @@
+# Organiser listing pages that techevents.co.nz events have come from.
+#
+# Each source is a page where an organiser lists many events (Humanitix host,
+# Meetup group, Luma calendar, Eventbrite organiser, or their own /events page),
+# so it can be re-checked for new events instead of waiting for the Google Sheet.
+# Built by matching every live event's registration_url back to its organiser.
+#
+# Fields:
+#   name       shown publicly as the "Source:" link on event pages, so keep it a
+#              plain organiser name (put context in notes, not in brackets here)
+#   url        page a person would browse
+#   platform   how the page is built (decides how to read it)
+#   feed       machine-readable endpoint, where one was found and tested
+#   also       other pages from the same organiser (secondary platform, regional groups)
+#   filter     the listing includes non-tech or non-NZ events that need filtering out
+#   status     active = upcoming events on 2026-10-06; quiet = none upcoming;
+#              unknown = page has no dates; unverified = couldn't load it (Cloudflare/JS)
+#   upcoming   upcoming events counted on 2026-10-06
+#   site_event_ids  techevents.co.nz event ids that came from this organiser
+#
+# no_listing records events checked and found to have no multi-event page
+# (one-off conferences, informal meetups with no URL), so they aren't re-researched.
+
+checked_on: 2026-10-06
+
+sources:
+
+  # --- Humanitix host pages (server-rendered; event links carry ?hxchl=hex-pfl) ---
+
+  - name: Soda Inc.
+    url: https://events.humanitix.com/host/5e39fac594072c00083d7359
+    platform: humanitix
+    filter: General small-business events in Waikato; keep the startup/tech/innovation ones.
+    status: active
+    upcoming: 2
+    regions: [waikato, online]
+    latest_site_event: 2026-10-21
+    site_event_ids: [137, 223, 232, 238, 295, 300]
+
+  - name: FLINT and TUANZ
+    url: https://events.humanitix.com/host/60c2e2dfc217da000b70a655
+    platform: humanitix
+    also:
+      - https://events.humanitix.com/host/60c2e77ec217da000b716f99
+      - https://tuanz.org.nz/events/
+    status: active
+    upcoming: 1
+    regions: [auckland, otago]
+    latest_site_event: 2026-11-11
+    site_event_ids: [101, 105, 199, 200, 216, 372]
+    notes: FLINT (Future Leaders in Technology) runs events in Akl, Wlg, Chc and Queenstown. The FLINT pages on tuanz.org.nz 404 and the TUANZ calendar is empty, so Humanitix is the only working list. Second Humanitix host is TUANZ itself.
+
+  - name: Ministry of Awesome
+    url: https://events.humanitix.com/host/5c9d55a5613560000f6fd1d7
+    platform: humanitix
+    also:
+      - https://ministryofawesome.com/events/
+    status: active
+    upcoming: 2
+    regions: [canterbury, auckland]
+    latest_site_event: 2026-10-28
+    site_event_ids: [19, 127, 228, 234, 278, 354, 361]
+    notes: Christchurch founder events (Coffee & Jam etc.) and Electrify Aotearoa.
+
+  - name: NZ Tech Rally
+    url: https://events.humanitix.com/host/nztechrally
+    platform: humanitix
+    also:
+      - https://nztechrally.nz/meetup-calendar
+    status: active
+    upcoming: 1
+    regions: [wellington]
+    latest_site_event: 2026-07-29
+    site_event_ids: [12, 14, 96, 209, 235]
+    notes: "Wellington monthly meetups plus the annual conference (next: 7 May 2027). The website calendar is Squarespace (?format=json works)."
+
+  - name: Caelan Huntress
+    url: https://events.humanitix.com/host/caelan-huntress
+    platform: humanitix
+    status: active
+    upcoming: 1
+    regions: [canterbury]
+    latest_site_event: 2026-05-23
+    site_event_ids: [170, 196]
+    notes: Christchurch AI workshops/conference. Same person runs the Christchurch AI Meetup and AI Coaching Academy (see those entries).
+
+  - name: She Sharp
+    url: https://events.humanitix.com/host/5e3388f9a912950007fda1c7
+    platform: humanitix
+    status: active
+    upcoming: 1
+    regions: [auckland]
+    latest_site_event: 2026-10-08
+    site_event_ids: [241, 286]
+
+  - name: Te Kāinga Wāhine
+    url: https://events.humanitix.com/host/te-kainga-wahine
+    platform: humanitix
+    status: active
+    upcoming: 2
+    regions: [auckland, otago]
+    latest_site_event: 2026-10-30
+    site_event_ids: [289, 307]
+
+  - name: simpact AI
+    url: https://events.humanitix.com/host/simpact-ai
+    platform: humanitix
+    status: active
+    upcoming: 3
+    regions: [online]
+    latest_site_event: 2026-12-02
+    site_event_ids: [304, 321, 386]
+    notes: Monthly AI for Good Aotearoa Lunch & Learn series.
+
+  - name: AUT Ventures
+    url: https://events.humanitix.com/host/6241080eaf051d0b9c080701
+    platform: humanitix
+    status: active
+    upcoming: 2
+    regions: [auckland]
+    latest_site_event: 2026-10-15
+    site_event_ids: [159, 401]
+
+  - name: Agnes Kiss
+    url: https://events.humanitix.com/host/agnes-kiss
+    platform: humanitix
+    status: active
+    upcoming: 2
+    regions: [online]
+    latest_site_event: 2026-10-19
+    site_event_ids: [129, 352]
+    notes: "'Think aloud' product-research chats."
+
+  - name: Her Tech Circle
+    url: https://events.humanitix.com/host/her-tech-circle
+    platform: humanitix
+    filter: Australian-based organisation; keep NZ events only.
+    status: active
+    upcoming: 4
+    regions: [auckland]
+    latest_site_event: 2026-10-15
+    site_event_ids: [80, 346]
+
+  - name: Parry Field Lawyers
+    url: https://events.humanitix.com/host/605f8c2ba07855000a79af78
+    platform: humanitix
+    filter: Law firm; only some events are startup/impact related.
+    status: active
+    upcoming: 2
+    regions: [online]
+    latest_site_event: 2026-05-22
+    site_event_ids: [144]
+
+  - name: Priority One
+    url: https://events.humanitix.com/host/607664da0ebb23000ad33323
+    platform: humanitix
+    filter: Tauranga economic development agency; mixed business events, keep tech/innovation ones.
+    status: active
+    upcoming: 5
+    regions: [bay_of_plenty]
+    latest_site_event: 2026-10-21
+    site_event_ids: [57, 356]
+
+  - name: The Good Day Matrix
+    url: https://events.humanitix.com/host/the-good-day-matrix
+    platform: humanitix
+    status: active
+    upcoming: 1
+    regions: [waikato]
+    latest_site_event: 2026-10-16
+    site_event_ids: [297]
+
+  - name: Wāhine in Data Ōtautahi
+    url: https://events.humanitix.com/host/wahine-in-data-tautahi
+    platform: humanitix
+    status: active
+    upcoming: 1
+    regions: [canterbury]
+    latest_site_event: 2026-10-13
+    site_event_ids: [66, 342]
+
+  - name: BioTechNZ
+    url: https://events.humanitix.com/host/biotechnz
+    platform: humanitix
+    status: active
+    upcoming: 1
+    regions: [otago, wellington]
+    latest_site_event: 2026-10-30
+    site_event_ids: [362, 365]
+    notes: "Biotech 'n' Beers networking evenings in Dunedin and Wellington. The Wellington edition (365) wasn't on this host page, so also check the Tech New Zealand calendar, which cross-lists both."
+
+  - name: BlockchainNZ
+    url: https://events.humanitix.com/host/blockchainnz
+    platform: humanitix
+    status: active
+    upcoming: 1
+    regions: [online]
+    latest_site_event: 2026-10-12
+    site_event_ids: [339]
+    notes: Webinars; also cross-listed on the Tech New Zealand calendar.
+
+  - name: IoT Forum NZ
+    url: https://events.humanitix.com/host/iot-forum
+    platform: humanitix
+    status: quiet
+    upcoming: 0
+    regions: [auckland]
+    latest_site_event: 2026-10-21
+    site_event_ids: [358]
+    notes: IoT Community Connect evenings. The 21 Oct 2026 event (358) wasn't listed on this host page, so it may be unlisted; it was found on the Tech New Zealand calendar.
+
+  - name: NZ Hi-Tech Awards
+    url: https://events.humanitix.com/host/nzhitechawards
+    platform: humanitix
+    also:
+      - https://www.hitech.org.nz/awards/key-dates/
+    status: quiet
+    upcoming: 0
+    regions: [auckland, canterbury, waikato, wellington]
+    latest_site_event: 2026-05-22
+    site_event_ids: [24, 25, 27, 28, 55, 192]
+    notes: "Annual cycle: city launch events in Jan/Feb, gala in May. The key-dates page already lists 2027 dates (launches 26 Jan Akl, 27 Jan Chc, 2 Feb Wlg; gala 21 May 2027)."
+
+  - name: TechWomen NZ
+    url: https://events.humanitix.com/host/techwomen
+    platform: humanitix
+    also:
+      - https://events.humanitix.com/host/5fadf56dafe235000b1769d1
+    status: quiet
+    upcoming: 0
+    regions: [online, otago]
+    latest_site_event: 2026-10-12
+    site_event_ids: [54, 219, 290]
+    notes: Two Humanitix hosts. Event 290 (12 Oct) wasn't listed on the host page, so it may be unlisted.
+
+  - name: Both Brains (Queenstown Women in Tech)
+    url: https://events.humanitix.com/host/both-brains
+    platform: humanitix
+    status: quiet
+    upcoming: 0
+    regions: [otago]
+    latest_site_event: 2026-10-02
+    site_event_ids: [103, 275]
+
+  - name: GEN NZ (Global Entrepreneurship Network)
+    url: https://events.humanitix.com/host/gen-nz-global-entrepreneurship-network-nz
+    platform: humanitix
+    status: quiet
+    upcoming: 0
+    regions: [online, wellington]
+    latest_site_event: 2026-08-24
+    site_event_ids: [109, 246]
+    notes: Only the annual Unconference is listed; the monthly Motu Connect Zoom sessions (109) aren't published anywhere public.
+
+  - name: Wellington Web Accessibility
+    url: https://events.humanitix.com/host/wellington-web-accessibility
+    platform: humanitix
+    status: quiet
+    upcoming: 0
+    regions: [wellington]
+    latest_site_event: 2026-07-23
+    site_event_ids: [187, 262]
+
+  - name: Economic Futures
+    url: https://events.humanitix.com/host/economic-futures
+    platform: humanitix
+    status: quiet
+    upcoming: 0
+    regions: [otago]
+    latest_site_event: 2026-10-23
+    site_event_ids: [302]
+    notes: Queenstown; Snapshots workshops co-run with Startup Queenstown Lakes.
+
+  - name: Girls in Business Organisation NZ
+    url: https://events.humanitix.com/host/girls-in-business-organisation-nz
+    platform: humanitix
+    status: quiet
+    upcoming: 0
+    regions: [auckland]
+    latest_site_event: 2026-09-05
+    site_event_ids: [249]
+
+  - name: GridAKL
+    url: https://events.humanitix.com/host/6099b0ecf5f642000a88bef2
+    platform: humanitix
+    status: quiet
+    upcoming: 0
+    regions: [auckland]
+    latest_site_event: 2026-02-24
+    site_event_ids: [82]
+    notes: Auckland Bootstrapper's Breakfast.
+
+  - name: Hype Cycle Club
+    url: https://events.humanitix.com/host/hype-cycle-club
+    platform: humanitix
+    status: quiet
+    upcoming: 0
+    regions: [bay_of_plenty]
+    latest_site_event: 2026-04-21
+    site_event_ids: [123]
+    notes: AI Engineering TRG; organiser Kelly Williams also runs the Women in STEM TGA Eventbrite.
+
+  - name: InternetNZ
+    url: https://events.humanitix.com/host/internetnz
+    platform: humanitix
+    status: quiet
+    upcoming: 0
+    regions: [wellington]
+    latest_site_event: 2026-05-12
+    site_event_ids: [102]
+    notes: NetTalks.
+
+  - name: Jenny Morel (Morgo workshops)
+    url: https://events.humanitix.com/host/jenny-morel
+    platform: humanitix
+    status: quiet
+    upcoming: 0
+    regions: [wellington]
+    latest_site_event: 2026-02-19
+    site_event_ids: [64]
+
+  - name: Propagator
+    url: https://events.humanitix.com/host/propagator
+    platform: humanitix
+    status: quiet
+    upcoming: 0
+    regions: [wellington]
+    latest_site_event: 2026-10-01
+    site_event_ids: [279]
+    notes: The Waiting Room Sessions.
+
+  - name: Startup Dunedin
+    url: https://events.humanitix.com/host/5ceb63cb2c205b000f199875
+    platform: humanitix
+    status: quiet
+    upcoming: 0
+    regions: [otago]
+    latest_site_event: 2026-07-15
+    site_event_ids: [225]
+
+  - name: VenturEd
+    url: https://events.humanitix.com/host/ventured
+    platform: humanitix
+    status: quiet
+    upcoming: 0
+    regions: [auckland]
+    latest_site_event: 2026-04-29
+    site_event_ids: [130]
+
+  - name: Whanganui Techweek
+    url: https://events.humanitix.com/host/whanganui-techweek
+    platform: humanitix
+    also:
+      - https://techweekwhanganui.com
+    status: quiet
+    upcoming: 0
+    regions: [manawatu_whanganui]
+    latest_site_event: 2026-05-18
+    site_event_ids: [195]
+    notes: Active around Techweek (May). The website also links Humanitix events hosted by other orgs.
+
+  - name: Wāhine in Tech Te Whanganui-a-Tara
+    url: https://events.humanitix.com/host/wahine-in-tech-te-whanganui-a-tara-or-wellington
+    platform: humanitix
+    status: quiet
+    upcoming: 0
+    regions: [wellington]
+    latest_site_event: 2026-05-19
+    site_event_ids: [194]
+
+  # --- Meetup groups (page embeds __NEXT_DATA__ with past + upcoming events) ---
+
+  - name: Kapiti Startup & Innovation Network
+    url: https://www.meetup.com/kapiti-startup-innovate-network-meetup/events/
+    platform: meetup
+    status: active
+    upcoming: 30
+    regions: [wellington]
+    latest_site_event: 2026-12-31
+    site_event_ids: [106, 126, 139, 142, 220, 226, 236, 244, 247, 250, 251, 252, 255, 257, 258, 260, 261, 328, 396]
+    notes: Posts two parallel events per fortnightly Thursday, so dedupe by date. 30 upcoming may be a page cap.
+
+  - name: Christchurch AI Meetup
+    url: https://www.meetup.com/christchurch-ai/events/
+    platform: meetup
+    also:
+      - https://christchurch-ai.com/past-events
+    status: active
+    upcoming: 2
+    regions: [canterbury]
+    latest_site_event: 2026-11-09
+    site_event_ids: [38, 67, 68, 69, 169, 263, 270, 274, 371]
+    notes: Monthly at EPIC Innovation. One-off conferences are on christchurch-ai.com or Caelan Huntress's Humanitix.
+
+  - name: Code, Coffee & AI Auckland
+    url: https://www.meetup.com/code-coffee-auckland/events/
+    platform: meetup
+    status: active
+    upcoming: 8
+    regions: [auckland]
+    latest_site_event: 2026-12-27
+    site_event_ids: [283, 298, 308, 318, 324, 327, 395]
+    notes: Fortnightly Code, Coffee & Connect plus virtual Golden Hour co-working sessions.
+
+  - name: Christchurch IT Curry Club
+    url: https://www.meetup.com/christchurch-it-curry-club/events/
+    platform: meetup
+    status: active
+    upcoming: 12
+    regions: [canterbury]
+    latest_site_event: 2026-12-08
+    site_event_ids: [292, 311, 325]
+
+  - name: The Project Community Christchurch
+    url: https://www.meetup.com/the-project-community-christchurch/events/
+    platform: meetup
+    filter: Project-management community, not tech-specific; keep meetups relevant to tech and digital project delivery.
+    status: active
+    upcoming: 1
+    regions: [canterbury]
+    latest_site_event: 2026-11-19
+    site_event_ids: [381]
+    notes: Quarterly evening meetups (Feb, May, Aug, Nov). Cross-listed on the Canterbury Tech calendar.
+
+  - name: Sec for Devs
+    url: https://www.meetup.com/sec-for-devs/events/
+    platform: meetup
+    status: active
+    upcoming: 2
+    regions: [wellington]
+    latest_site_event: 2026-10-21
+    site_event_ids: [172, 173, 174, 357]
+
+  - name: Auckland Makes Games
+    url: https://www.meetup.com/aucklandmakesgames/events/
+    platform: meetup
+    filter: Don't list the weekly Tuesday and Friday "Arcade Social Co-working" sessions (owner decision, 2026-10-06); keep any other events.
+    status: active
+    upcoming: 30
+    regions: [auckland]
+    latest_site_event: 2026-04-24
+    site_event_ids: [107, 128]
+    notes: Weekly Arcade Social co-working; 30 upcoming may be a page cap.
+
+  - name: Nelson Dev Group
+    url: https://www.meetup.com/nelson-dev-group/events/
+    platform: meetup
+    status: active
+    upcoming: 12
+    regions: [nelson]
+    latest_site_event: 2026-12-09
+    site_event_ids: [56, 344, 373, 391]
+
+  - name: ProductTank Christchurch
+    url: https://www.meetup.com/product_tank_christchurch_nz/events/
+    platform: meetup
+    status: active
+    upcoming: 13
+    regions: [canterbury]
+    latest_site_event: 2027-01-06
+    site_event_ids: [39, 332, 367, 375, 387, 397]
+
+  - name: Cryptocurrency NZ
+    url: https://cryptocurrency.org.nz/meetups
+    platform: meetup
+    also:
+      - https://www.meetup.com/auckland-cryptocurrency-nz-meetup/events/
+      - https://www.meetup.com/wellington-cryptocurrency-nz-meetup/events/
+      - https://www.meetup.com/hamilton-cryptocurrency-nz-meetup/events/
+      - https://www.meetup.com/christchurch-cryptocurrency-blockchain-meetup/events/
+      - https://www.meetup.com/dunedin-cryptocurrency-nz-meetup/events/
+      - https://www.meetup.com/gisborne-cryptocurrency-nz-meetup/events/
+      - https://www.meetup.com/hawkes-bay-cryptocurrency-nz-meetup-group/events/
+      - https://www.meetup.com/nelson-cryptocurrency-nz-meetup/events/
+      - https://www.meetup.com/Invercargill-cryptocurrency-nz-meetup/events/
+    status: unknown
+    upcoming: null
+    regions: [online, otago]
+    latest_site_event: 2026-12-23
+    site_event_ids: [41, 132, 145, 149, 152, 303, 322, 394]
+    notes: "Nine regional Meetup groups. The hub page has no dates; check the regional groups listed under also. Regional meetups run on the last Wednesday of the month, and the site lists them as one monthly online 'Cryptocurrency NZ Meetup' (e.g. 303, 322), so regional meetups on that date are already covered; list other dates individually (e.g. 394). Invercargill cancelled its Jul and Sep 2026 meetups."
+
+  - name: Christchurch AI Risk and Ethics Community
+    url: https://www.meetup.com/christchurch-ai-risk-and-ethics-community/events/
+    platform: meetup
+    status: quiet
+    upcoming: 0
+    regions: [canterbury]
+    latest_site_event: 2026-01-29
+    site_event_ids: [16, 40]
+
+  - name: BA Career Meetup Group
+    url: https://www.meetup.com/ba-career-meetup-group/events/
+    platform: meetup
+    status: quiet
+    upcoming: 0
+    regions: [auckland]
+    latest_site_event: 2026-05-13
+    site_event_ids: [193]
+
+  - name: Job Hackers Global
+    url: https://www.meetup.com/job-hackers-global/events/
+    platform: meetup
+    filter: Global online group; keep NZ-relevant events.
+    status: quiet
+    upcoming: 0
+    regions: [online]
+    latest_site_event: 2026-04-15
+    site_event_ids: [112]
+
+  # --- Luma calendars (feed = upcoming events JSON; use period=past for history) ---
+
+  - name: HackAotearoa
+    url: https://luma.com/hackaotearoa
+    platform: luma
+    feed: https://api.lu.ma/calendar/get-items?period=future&calendar_api_id=cal-yoCWwRWRLq8Cqnu
+    status: active
+    upcoming: 10
+    regions: [auckland]
+    latest_site_event: 2026-12-11
+    site_event_ids: [282, 306, 315, 323, 326, 347, 348, 363, 377, 385, 392]
+    notes: Co-working sessions in Akl, Wlg and Southern Lakes.
+
+  - name: Movac
+    url: https://luma.com/movac
+    platform: luma
+    feed: https://api.lu.ma/calendar/get-items?period=future&calendar_api_id=cal-w1uXYcksa2DK2Mg
+    status: active
+    upcoming: 1
+    regions: [auckland]
+    latest_site_event: 2026-10-16
+    site_event_ids: [122, 229, 349]
+    notes: Community events in Akl, Wlg and Chc.
+
+  - name: AI Supercharge
+    url: https://luma.com/aisupercharge.co.nz
+    platform: luma
+    feed: https://api.lu.ma/calendar/get-items?period=future&calendar_api_id=cal-gIbNeiAd67V8pqM
+    status: active
+    upcoming: 3
+    regions: [wellington]
+    latest_site_event: 2026-12-04
+    site_event_ids: [281, 364, 378, 389]
+
+  - name: Night of Ideas
+    url: https://luma.com/user/katharinaa
+    platform: luma
+    feed: https://api.lu.ma/user/profile/events-hosting?user_api_id=usr-dzbnAZOjwWb6cHl
+    status: active
+    upcoming: 2
+    regions: [auckland]
+    latest_site_event: 2026-07-22
+    site_event_ids: [231]
+    notes: The url is the host's personal Luma profile. It mixes Night of Ideas with Startup Run Club and From Scratch, which have their own entries below. On 2026-10-06 no Night of Ideas events were listed.
+
+  - name: Startup Run Club
+    url: https://luma.com/runclub
+    platform: luma
+    feed: https://api.lu.ma/calendar/get-items?period=future&calendar_api_id=cal-MCuJvswlC4YPGYB
+    status: active
+    upcoming: 1
+    regions: [auckland]
+    latest_site_event: 2026-10-08
+    site_event_ids: [334]
+    notes: Weekly Thursday 7am run and coffee from Buoy Cafe, Westhaven. Luma usually shows only the next date. Same host as Night of Ideas.
+
+  - name: From Scratch
+    url: https://luma.com/fromscratchcrew
+    platform: luma
+    feed: https://api.lu.ma/calendar/get-items?period=future&calendar_api_id=cal-QXFJU562ZBfdtbu
+    also:
+      - https://fromscratchcrew.com
+    status: active
+    upcoming: 1
+    regions: [auckland]
+    latest_site_event: 2026-10-17
+    site_event_ids: [351]
+    notes: Women founder community socials in Auckland. Co-hosted by the Night of Ideas host.
+
+  - name: SpaceXAI for Auckland
+    url: https://luma.com/spacexai-auckland
+    platform: luma
+    feed: https://api.lu.ma/calendar/get-items?period=future&calendar_api_id=cal-LMRvotZncSGYsXx
+    status: active
+    upcoming: 1
+    regions: [auckland]
+    latest_site_event: 2026-10-08
+    site_event_ids: [288]
+
+  - name: Foundry by Blackbird
+    url: https://luma.com/fdry-bb
+    platform: luma
+    feed: https://api.lu.ma/calendar/get-items?period=future&calendar_api_id=cal-XIykbcVHsEbMhiP
+    filter: Mostly Australian cities; keep NZ ones.
+    status: quiet
+    upcoming: 0
+    regions: [auckland, canterbury, otago, wellington]
+    latest_site_event: 2026-02-20
+    site_event_ids: [60, 61, 62, 63]
+
+  - name: AI Engineer NZ
+    url: https://luma.com/aiengineer
+    platform: luma
+    feed: https://api.lu.ma/calendar/get-items?period=future&calendar_api_id=cal-8akOfWB4iKHLnn6
+    status: quiet
+    upcoming: 0
+    regions: [wellington]
+    latest_site_event: 2026-10-01
+    site_event_ids: [280]
+    notes: Wellington AI meetup, monthly since mid-2024 (20 past events); quiet right now.
+
+  # --- Eventbrite organiser pages (embedded JSON lists upcoming events) ---
+  # The old /org/<id>/showmore/ endpoint returns 403. For more than the first page use
+  # /organizer-profile/api/organizers/<id>/events/?page=N&pageSize=12.
+
+  - name: Empower Her Community
+    url: https://www.eventbrite.co.nz/o/empower-her-community-68030743873
+    platform: eventbrite
+    filter: Women-in-business networking, mostly not tech, many chapters overseas; keep NZ tech-relevant ones only.
+    notes: Low yield. On 2026-10-06 all 40 upcoming events were non-tech "Confident Content Creation" sessions.
+    status: active
+    upcoming: 40
+    regions: [nelson, wellington]
+    latest_site_event: 2026-07-23
+    site_event_ids: [108, 213]
+
+  - name: Venture Taranaki
+    url: https://www.eventbrite.co.nz/o/venture-taranaki-31053007029
+    platform: eventbrite
+    status: active
+    upcoming: 1
+    regions: [taranaki]
+    latest_site_event: 2026-10-15
+    site_event_ids: [140, 294]
+
+  - name: Centre for Innovation and Entrepreneurship (University of Auckland)
+    url: https://www.eventbrite.co.nz/o/centre-for-innovation-and-entrepreneurship-16849565066
+    platform: eventbrite
+    status: active
+    upcoming: 2
+    regions: [auckland]
+    latest_site_event: 2026-10-21
+    site_event_ids: [254]
+
+  - name: Fuckup Nights Auckland
+    url: https://www.eventbrite.com/o/fuckup-nights-auckland-121005525625
+    platform: eventbrite
+    status: active
+    upcoming: 1
+    regions: [auckland]
+    latest_site_event: 2026-10-08
+    site_event_ids: [287]
+
+  - name: Caffeine
+    url: https://www.eventbrite.co.nz/o/caffeine-110703732351
+    platform: eventbrite
+    status: quiet
+    upcoming: 0
+    regions: [auckland]
+    latest_site_event: 2026-02-26
+    site_event_ids: [75]
+
+  - name: Steve Knutson (AgentCamp)
+    url: https://www.eventbrite.co.nz/o/steve-knutson-4014519291
+    platform: eventbrite
+    status: quiet
+    upcoming: 0
+    regions: [canterbury]
+    latest_site_event: 2026-03-07
+    site_event_ids: [83]
+
+  - name: Victoria University of Wellington
+    url: https://www.eventbrite.co.nz/o/victoria-university-of-wellington-121125891328
+    platform: eventbrite
+    status: quiet
+    upcoming: 0
+    regions: [wellington]
+    latest_site_event: 2026-05-12
+    site_event_ids: [185]
+
+  - name: Women in STEM TGA
+    url: https://www.eventbrite.co.nz/o/kelly-williams-32292253453
+    platform: eventbrite
+    status: quiet
+    upcoming: 0
+    regions: [bay_of_plenty]
+    latest_site_event: 2026-04-14
+    site_event_ids: [110]
+    notes: Tauranga; the Eventbrite organiser page is Kelly Williams's (she also runs Hype Cycle Club).
+
+  # --- Squarespace sites (feed = ?format=json, upcoming + past) ---
+
+  - name: KiwiSaaS
+    url: https://www.kiwisaas.com/events
+    platform: squarespace
+    feed: https://www.kiwisaas.com/events?format=json
+    also:
+      - https://events.humanitix.com/host/kiwisaas
+    status: active
+    upcoming: 8
+    regions: [auckland, wellington, apac]
+    latest_site_event: 2026-12-17
+    site_event_ids: [7, 8, 9, 10, 11, 111, 161, 163, 329, 335, 368, 407, 409, 410]
+    notes: Website is the most complete list and includes partner events; Humanitix only has KiwiSaaS-run ones.
+
+  - name: Startup Queenstown Lakes
+    url: https://www.startupqueenstownlakes.com/events
+    platform: squarespace
+    feed: https://www.startupqueenstownlakes.com/events?format=json
+    also:
+      - https://events.humanitix.com/host/6364553a4bc66967bbc75825
+    status: active
+    upcoming: 4
+    regions: [otago, online]
+    latest_site_event: 2026-10-16
+    site_event_ids: [47, 48, 49, 50, 168, 291, 331, 336, 350]
+
+  - name: DOSO
+    url: https://www.doso.nz/events
+    platform: squarespace
+    feed: https://www.doso.nz/events?format=json
+    also:
+      - https://events.humanitix.com/host/doso
+    status: active
+    upcoming: 3
+    regions: [taranaki]
+    latest_site_event: 2026-11-25
+    site_event_ids: [78, 153, 305, 317, 384]
+    notes: Taranaki startup community. Monthly Done Something meetups and Startup Weekend Taranaki. The site's Startup Weekend page still links the old Jul–Aug Hāwera Humanitix event; the Nov New Plymouth one is startup-weekend-taranaki-2026-yudz2ld3.
+
+  - name: Revved
+    url: https://www.revved.events/whats-on
+    platform: squarespace
+    status: active
+    upcoming: 4
+    regions: [auckland]
+    latest_site_event: 2026-10-28
+    site_event_ids: [155, 404]
+    notes: Plain Squarespace page (no event collection JSON). Some events are member-only; the annual summit is separate.
+
+  - name: ThreeBlackCats
+    url: https://www.threeblackcats.co.nz/lunchandlearn
+    platform: squarespace
+    feed: https://www.threeblackcats.co.nz/lunchandlearn?format=json
+    status: quiet
+    upcoming: 0
+    regions: [online]
+    latest_site_event: 2026-05-08
+    site_event_ids: [176, 177]
+    notes: Online privacy lunch-and-learns run in batches.
+
+  - name: Hardware Meetup NZ
+    url: https://hardwaremeetup.co.nz/events-blog
+    platform: squarespace
+    feed: https://hardwaremeetup.co.nz/events-blog?format=rss
+    status: quiet
+    upcoming: 0
+    regions: [auckland]
+    latest_site_event: 2026-07-22
+    site_event_ids: [230]
+    notes: "One blog post per event, back to 2021. The RSS only has write-ups of past events and the 'upcoming' category holds a stale 2024 placeholder, so it never shows upcoming events. They may be on a Meetup group: meetup.com/hardware-meetup-nz returned no group data to curl on 2026-10-06 (unverified)."
+
+  # --- WordPress 'The Events Calendar' sites (feed = REST API, upcoming events) ---
+
+  - name: Digital Identity NZ (DINZ)
+    url: https://digitalidentity.nz/events/
+    platform: wordpress_events_calendar
+    feed: https://digitalidentity.nz/wp-json/tribe/events/v1/events
+    status: active
+    upcoming: 2
+    regions: [online, wellington]
+    latest_site_event: 2026-12-01
+    site_event_ids: [104, 136, 147, 151, 154, 158, 162, 164, 167, 243]
+    notes: Monthly Virtual Coffee Chats. The Digital Trust Hui Taumata (243) is linked from the site nav, not the calendar.
+
+  - name: EdTechNZ
+    url: https://edtechnz.org.nz/events/
+    platform: wordpress_events_calendar
+    feed: https://edtechnz.org.nz/wp-json/tribe/events/v1/events
+    also:
+      - https://events.humanitix.com/host/edtech
+    status: active
+    upcoming: 6
+    regions: [auckland, waikato, wellington, canterbury, online, otago]
+    latest_site_event: 2026-11-18
+    site_event_ids: [77, 115, 116, 117, 120, 239, 240, 312, 313, 314, 402, 376, 379]
+    notes: Mostly regional Community Connect events. Skip the 'Upcoming events for 2026' placeholder.
+
+  - name: AI Forum NZ
+    url: https://aiforum.org.nz/events
+    platform: wordpress_events_calendar
+    feed: https://aiforum.org.nz/wp-json/tribe/events/v1/events
+    also:
+      - https://events.humanitix.com/host/62a28e7c88c5fb0b35130326
+    status: active
+    upcoming: 5
+    regions: [auckland, online, wellington]
+    latest_site_event: 2026-11-18
+    site_event_ids: [119, 135, 138, 141, 160, 319, 355, 405, 369]
+    notes: Covers the aotearoaai.nz and aicreativeindustries.nz microsites. Some listings are partner events; skip the 31 Dec placeholder. The Humanitix host under also showed no live events on 2026-10-06 even though the feed's Humanitix links work (they ticket through another account), so rely on the feed.
+
+  - name: AgriTechNZ
+    url: https://agritechnz.org.nz/events/
+    platform: wordpress_events_calendar
+    feed: https://agritechnz.org.nz/wp-json/tribe/events/v1/events
+    also:
+      - https://events.humanitix.com/host/agritechnz
+    filter: Mostly third-party sector events (Fieldays, overseas expos); AgriTechNZ's own events are on its Humanitix host.
+    status: active
+    upcoming: 12
+    regions: [auckland, bay_of_plenty, otago]
+    latest_site_event: 2026-11-12
+    site_event_ids: [113, 156, 165]
+
+  - name: Tech New Zealand
+    url: https://technewzealand.org.nz/events/
+    platform: wordpress_events_calendar
+    feed: https://technewzealand.org.nz/wp-json/tribe/events/v1/events
+    status: active
+    upcoming: 31
+    regions: [otago, auckland, canterbury, waikato, wellington]
+    latest_site_event: 2026-10-15
+    site_event_ids: [20, 157, 340, 341, 400, 345]
+    notes: Umbrella calendar. Covers Techweek and BlockchainNZ, and cross-lists KiwiNet, Auckland Startup Week, EdTechNZ, FinTechNZ, AI Forum, DINZ, TUANZ and TechWomen. Highest-yield single source; dedupe against the others.
+
+  - name: Canterbury Tech
+    url: https://canterburytech.nz/events/
+    platform: wordpress_events_calendar
+    feed: https://canterburytech.nz/wp-json/tribe/events/v1/events
+    status: active
+    upcoming: 6
+    regions: [canterbury]
+    latest_site_event: 2026-11-03
+    site_event_ids: [37, 330, 333, 366]
+    notes: TechTuesdays, technical meetups, Tech Summit; also cross-lists Christchurch community meetups.
+
+  - name: FinTechNZ
+    url: https://fintechnz.org.nz/events/
+    platform: wordpress_events_calendar
+    feed: https://fintechnz.org.nz/wp-json/tribe/events/v1/events
+    status: active
+    upcoming: 2
+    regions: [wellington]
+    latest_site_event: 2026-11-10
+    site_event_ids: [32, 343, 408]
+    notes: The Hui Taumata itself lives on fintechhui.nz.
+
+  # --- Other websites (HTML) ---
+
+  - name: Creative HQ
+    url: https://creativehq.co.nz/connect/
+    platform: website
+    feed: https://events.creativehq.co.nz/sitemap.xml
+    also:
+      - https://events.creativehq.co.nz/events
+    status: active
+    upcoming: 5
+    regions: [wellington]
+    latest_site_event: 2026-12-03
+    site_event_ids: [23, 29, 43, 58, 114, 131, 133, 210, 211, 214, 293, 299, 301, 360, 388]
+    notes: "/connect/ is server-rendered but lags behind: Creative Tech Summit 2026 was only in the Zoho Backstage portal. The portal is JS-only, but its sitemap.xml (feed, ~140 event pages with lastmod) plus each event page's JSON-LD gives dates and venue; fuller data is at events.creativehq.co.nz/public/site?eventId=<id>&portalId=7002985569."
+
+  - name: Excel in BI
+    url: https://excelinbi.com/learn/
+    platform: website
+    feed: https://script.google.com/macros/s/AKfycbzn9qVh1ByvRYu513VgAK9ICbxGILG0faGyTLVXqGV1S-6m2gaP_UqmALUd0yNxlfAW/exec
+    status: active
+    upcoming: 8
+    regions: [online]
+    latest_site_event: 2026-12-18
+    site_event_ids: [85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 148, 338, 359, 370, 382, 390, 393]
+    notes: "Fortnightly Teams webinars. The page loads its list from the Apps Script JSON feed, which includes Teams registration links. The feed 404s at Google's redirect unless curl keeps cookies (curl -sL -c jar -b jar). Site titles follow '<topic> Presented by Excel in BI NZ'."
+
+  - name: DataEngBytes
+    url: https://dataengbytes.com/
+    platform: website
+    also:
+      - https://dataengbytes.com/events
+      - https://dataengbytes.com/2027/auckland/tickets
+    filter: "ANZ conference tour; keep Auckland (next: 19 Mar 2027)."
+    status: active
+    upcoming: 6
+    regions: [auckland]
+    latest_site_event: 2026-03-24
+    site_event_ids: [17, 36]
+    notes: "Not on techevents yet: Auckland 2027 (19 Mar 2027). The old Ticket Tailor box office is stale; tickets are on dataengbytes.com/<year>/<city>/tickets."
+
+  - name: Aerospace New Zealand
+    url: https://www.aerospace.org.nz/events
+    platform: website
+    status: active
+    upcoming: 2
+    regions: [canterbury]
+    latest_site_event: 2026-12-07
+    site_event_ids: [277, 374, 411]
+
+  - name: Auckland Startup Week
+    url: https://www.aucklandstartupweek.com/programme
+    platform: website
+    feed: https://www.aucklandstartupweek.com/api/sessions.json
+    status: active
+    upcoming: 54
+    regions: [auckland]
+    latest_site_event: 2026-10-12
+    site_event_ids: [21]
+    notes: Annual festival week (12-16 Oct 2026); the sessions JSON is only populated around the festival.
+
+  - name: Aventedge
+    url: https://aventedge.com/events/
+    platform: website
+    also:
+      - https://techx.aventedge.com/
+    filter: Mostly Australian summits; keep NZ. TechXcelerate Aotearoa 2027 is only on the techx microsite.
+    status: active
+    upcoming: 7
+    regions: [auckland]
+    latest_site_event: 2026-10-20
+    site_event_ids: [35, 353]
+
+  - name: KiwiHacks Nova
+    url: https://nova.kiwihacks.org/
+    platform: website
+    status: active
+    upcoming: 1
+    regions: [auckland]
+    latest_site_event: 2026-10-09
+    site_event_ids: [99, 337]
+    notes: Secondary-school hackathons in several cities.
+
+  - name: Migrants in Tech NZ
+    url: https://migrantsintech.nz/events
+    platform: website
+    also:
+      - https://events.humanitix.com/host/migrants-in-tech
+    status: active
+    upcoming: 1
+    regions: [auckland]
+    latest_site_event: 2026-06-25
+    site_event_ids: [150]
+
+  - name: Te Hapori Matihiko
+    url: https://matihiko.nz/events/
+    platform: website
+    status: active
+    upcoming: 2
+    regions: [wellington]
+    latest_site_event: 2026-11-26
+    site_event_ids: [320, 406]
+
+  - name: Tech Investment Network (TIN)
+    url: https://tin100.com/events/
+    platform: website
+    status: active
+    upcoming: 1
+    regions: [auckland]
+    latest_site_event: 2026-11-05
+    site_event_ids: [310]
+
+  - name: TestingMind
+    url: https://www.testingmind.com/event/
+    platform: website
+    filter: Global summit organiser; keep NZ cities.
+    status: active
+    upcoming: 22
+    regions: [auckland]
+    latest_site_event: 2026-11-25
+    site_event_ids: [18, 383]
+
+  - name: Web in Travel (WiT)
+    url: https://www.witevents.com/
+    platform: website
+    filter: Global series; keep WiT Queenstown.
+    status: active
+    upcoming: 6
+    regions: [otago]
+    latest_site_event: 2026-06-21
+    site_event_ids: [13]
+
+  - name: Brightstar
+    url: https://brightstar.co.nz/technology-cyber-data-cx/
+    platform: website
+    also:
+      - https://brightstar.co.nz/events/
+    filter: Full calendar covers all sectors (law, health, finance); the tech sector page is the useful one.
+    status: unknown
+    upcoming: null
+    regions: [wellington, auckland]
+    latest_site_event: 2026-11-19
+    site_event_ids: [33, 45, 46, 380]
+    notes: "Conference organiser: CIO Summit, National Cyber Security Summit, Digitising Government."
+
+  - name: KiwiNet
+    url: https://kiwinet.org.nz/Events
+    platform: website
+    status: unknown
+    upcoming: null
+    regions: [auckland]
+    latest_site_event: 2026-10-08
+    site_event_ids: [285]
+    notes: Hub of event types without dates; dated KiwiNet events also appear on the Tech NZ calendar.
+
+  - name: Mountain Club Queenstown
+    url: https://www.mountainclub.co.nz/experiences
+    platform: website
+    filter: Members' club calendar, mostly non-tech; keep entrepreneur/AI events.
+    status: unknown
+    upcoming: null
+    regions: [otago]
+    latest_site_event: 2026-10-21
+    site_event_ids: [51, 398, 399, 403]
+
+  - name: AI New Zealand
+    url: https://www.newzealand.ai/roadshow
+    platform: website
+    status: quiet
+    upcoming: 0
+    regions: [auckland, bay_of_plenty, canterbury, hawkes_bay, nelson, taranaki, waikato, wellington]
+    latest_site_event: 2026-06-25
+    site_event_ids: [175, 178, 179, 180, 181, 182, 183, 184]
+    notes: Annual Great NZ AI Roadshow, so check yearly. academy.newzealand.ai/c/events/ (Circle, JS-only) not checked.
+
+  - name: Icehouse Ventures
+    url: https://www.icehouseventures.co.nz/careers-of-the-future
+    platform: website
+    status: quiet
+    upcoming: 0
+    regions: [auckland, online]
+    latest_site_event: 2026-08-19
+    site_event_ids: [124, 224, 227, 245]
+    notes: Stale page; FirstCut events are invite-only by newsletter. Low yield.
+
+  - name: COIN South
+    url: https://www.coinsouth.nz/events
+    platform: website
+    status: quiet
+    upcoming: 0
+    regions: [southland]
+    latest_site_event: 2026-02-25
+    site_event_ids: [76]
+
+  - name: Digital Workplace Results
+    url: https://dwresults.com/digital-workplace-events/
+    platform: website
+    also:
+      - https://dwresults.com/digital-workplace-days/
+    status: quiet
+    upcoming: 0
+    regions: [wellington]
+    latest_site_event: 2026-01-15
+    site_event_ids: [31]
+    notes: "Looks stale for 2026: the conference season is over and the page promises 'regional events later in 2026' with no dates."
+
+  - name: HTK Start Up
+    url: https://htkstartup.com/events/
+    platform: website
+    status: quiet
+    upcoming: 0
+    regions: [auckland]
+    latest_site_event: 2026-11-26
+    site_event_ids: [166]
+    notes: Looks stale; the Maui Venture Summit isn't listed. Latest listing was 1 Jul 2026, and all three Register buttons point to the same TechWomen webinar link.
+
+  - name: Seen Ventures
+    url: https://www.seen-ventures.com/events
+    platform: website
+    status: quiet
+    upcoming: 0
+    regions: [auckland]
+    latest_site_event: 2026-08-06
+    site_event_ids: [242]
+
+  # --- Unverified (blocked by Cloudflare or JS-only; needs a real browser) ---
+
+  - name: Angel Association NZ (AANZ)
+    url: https://app.glueup.com/org/angelassociationevents/events/
+    platform: glueup
+    also:
+      - https://www.angelassociation.co.nz/aanz-events/
+    status: unverified
+    upcoming: null
+    regions: [online, wellington]
+    latest_site_event: 2026-11-19
+    site_event_ids: [121, 146, 218, 233, 237, 248, 259]
+    notes: Linked from every AANZ event page; Cloudflare blocks the list. Individual Glue Up event pages do load.
+
+  - name: AI Coaching Academy
+    url: https://ai-coaching.academy/events
+    platform: mighty_networks
+    status: unverified
+    upcoming: null
+    regions: [canterbury, online]
+    latest_site_event: 2026-10-16
+    site_event_ids: [118, 171, 207, 269, 273, 276]
+    notes: Run by Caelan Huntress. Cloudflare challenge on every request.
+
+  - name: NZTE
+    url: https://my.nzte.govt.nz/attend
+    platform: website
+    status: unverified
+    upcoming: null
+    regions: [online]
+    latest_site_event: 2026-03-03
+    site_event_ids: [44]
+    notes: JS app; many events are for NZTE customers only.
+
+  - name: SpaceBase (ActInSpace NZ)
+    url: https://spacebase.co/challenges/
+    platform: website
+    status: unverified
+    upcoming: null
+    regions: [auckland]
+    latest_site_event: 2026-01-30
+    site_event_ids: [26]
+
+  - name: The Marketing Club AU/NZ
+    url: https://tmc.zohobackstage.com.au/events
+    platform: zoho_backstage
+    status: unverified
+    upcoming: null
+    regions: [auckland]
+    latest_site_event: 2026-05-22
+    site_event_ids: [143]
+
+  - name: University of Otago
+    url: https://www.otago.ac.nz/news/events
+    platform: website
+    filter: University-wide calendar, mostly non-tech.
+    status: unverified
+    upcoming: null
+    regions: [otago]
+    latest_site_event: 2026-05-19
+    site_event_ids: [186]
+
+no_listing:
+  - title: Tech Masters at The New Zealand Open
+    site_event_ids: [22]
+    reason: One-off side event; no organiser events page.
+  - title: Apex Venture & Tech Connect Days
+    site_event_ids: [30]
+    reason: International touring series; Eventbrite event now 404.
+  - title: Code Camp Wellington
+    site_event_ids: [34]
+    reason: Single annual conference.
+  - title: Queenstown Tech Social
+    site_event_ids: [42]
+    reason: Informal pub social with no URL or online presence.
+  - title: NZ Tech Expo
+    site_event_ids: [52]
+    reason: Single annual expo.
+  - title: "AI Agents: Human - AI Collaboration"
+    site_event_ids: [53]
+    reason: Meetup group 'ai-agent-builders' no longer exists.
+  - title: Celebrating Taiawa Wellington Tech Hub
+    site_event_ids: [59]
+    reason: One-off VUW launch on EventsAir (no public index).
+  - title: AI Surge education summits
+    site_event_ids: [71, 72, 73, 74]
+    reason: Australian consultancy; standalone landing pages, no events index.
+  - title: TEDx Wynyard Quarter
+    site_event_ids: [79]
+    reason: Domain no longer resolves.
+  - title: Whangārei Startups Pitch-and-Mix Social
+    site_event_ids: [81]
+    reason: Ended Humanitix page hides the host; no other listing found.
+  - title: Queenstown Women in Health Tech Coffee Catch-Up
+    site_event_ids: [84, 201, 202, 203, 204, 205, 206]
+    reason: Monthly informal coffee with no URL or online presence.
+  - title: Papamoa Startup Coffee Club
+    site_event_ids: [97, 100, 191]
+    reason: Informal coffee meetup with no URL or online presence.
+  - title: Cleantech Expo - Auckland
+    site_event_ids: [125]
+    reason: One-off AUT event; ended Humanitix page hides the host.
+  - title: VESA Hackathon 2026
+    site_event_ids: [134]
+    reason: Google Form for a one-off student hackathon.
+  - title: Wonder Workshop
+    site_event_ids: [188, 189]
+    reason: Monthly, but each session is its own lilregie subdomain with no index.
+  - title: NZ Games Festival
+    site_event_ids: [190]
+    reason: Annual festival; recheck nzgamesfest.com around April-May.
+  - title: New Zealand IT & AI Job Forum
+    site_event_ids: [197]
+    reason: One-off; ended Humanitix page hides the host.
+  - title: Tauranga AI Business Summit
+    site_event_ids: [198]
+    reason: School fundraiser (Mount Maunganui College).
+  - title: Leading Through the AI Shift
+    site_event_ids: [208]
+    reason: One-off roundtable on a private Luma calendar.
+  - title: BizFest 2026
+    site_event_ids: [212]
+    reason: Annual Porirua business festival on Ticketspace.
+  - title: Startup People Summit
+    site_event_ids: [215]
+    reason: Single annual virtual summit.
+  - title: Founders Rooftop Series
+    site_event_ids: [217, 272]
+    reason: Partiful invites only; no public host listing.
+  - title: Tupu Showcase
+    site_event_ids: [221]
+    reason: Finale of an annual accelerator programme.
+  - title: NZCryptoCon
+    site_event_ids: [222]
+    reason: Single annual conference.
+  - title: Stelar
+    site_event_ids: [253]
+    reason: Single annual event site.
+  - title: Sunrise Aotearoa
+    site_event_ids: [256]
+    reason: Blackbird's annual festival; its Humanitix host lists only this.
+  - title: Summer of Tech Meet & Greet
+    site_event_ids: [265, 266, 267, 268]
+    reason: Annual job-fair page; other events are behind a login.
+  - title: Ski Commerce
+    site_event_ids: [271]
+    reason: First-time conference by an SEO agency.
+  - title: Nexus Summit
+    site_event_ids: [284]
+    reason: Annual summit; new lilregie subdomain each year.
+  - title: New Zealand Small Business Awards
+    site_event_ids: [296]
+    reason: Annual awards; ended Humanitix page hides the host.
+  - title: EDNZ Conference
+    site_event_ids: [309]
+    reason: Annual conference on Cvent; new URL each year.
+  - title: Caffeine Prize
+    site_event_ids: [316]
+    reason: One-off prizegiving waitlist page (Caffeine's Eventbrite is listed above).

@@ -441,6 +441,8 @@ TECHEVENTS_API_URL=https://techevents.co.nz/api/v1 TECHEVENTS_API_TOKEN=<token> 
 - Never edit a sheet-sourced title in events.csv — the dedup key is title + start_date, so an edited title comes back as a duplicate row on the next pull. Fix bad titles on the live site via `PATCH /api/v1/events/:id` instead.
 - `TechEventsID` = `SKIP` means the event was deliberately held back (postponed, cancelled, or dead link); the reason and date checked are in `notes`. The uploader skips any non-blank ID — clear `SKIP` to upload it later.
 - `data/` is gitignored: events.csv is the only record of sheet↔site matching. Back it up before risky operations.
+- `config/event_sources.yml` lists the organiser pages that site events came from (Humanitix hosts, Meetup groups, Luma calendars, Eventbrite organisers, organisers' own `/events` pages), with tested JSON feeds where one exists. Add an entry when events start arriving from a new organiser.
+- `/check-sources` (`.claude/commands/check-sources.md`, local like `/pull-events`) checks those pages at most once a week and uploads new events: recurring events up to 3 months ahead, and one-off events at any future date once the organiser has set the actual day. It keeps its rows in `data/source_events.csv` (never `events.csv`, so the sheet pipeline sees them as existing site events), logs each run to `data/source_checks.csv`, dedupes against `data/techevents_all.csv` from `ruby scripts/dump_techevents.rb` (every live event, unlike `techevents.csv`), and uploads with `EVENTS_CSV=data/source_events.csv ruby scripts/upload_events.rb`.
 
 ---
 
