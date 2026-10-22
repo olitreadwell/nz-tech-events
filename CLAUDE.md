@@ -401,7 +401,7 @@ Pulls community events from the "Events in Aotearoa" Google Sheet into `data/eve
 ruby scripts/pull_events.rb
 ```
 
-Fetches the current and future monthly tabs, dedupes against the CSV by title + start_date, and appends only new rows (blank `TechEventsID`, `ai_updated=false`). Tab GIDs are hardcoded in the script — a new year's tabs must be added manually.
+Fetches the current and future monthly tabs, dedupes against the CSV by title + start_date, and appends only new rows (blank `TechEventsID`, `ai_updated=false`). Tab GIDs are hardcoded in `SheetFetcher::TABS` — add new tabs by hand as the sheet grows (find GIDs in the sheet's public `htmlview`). The sheet also keeps a whole-year tab (e.g. "2027") for events beyond the monthly tabs; it's listed with `month: nil`, takes the month from the date text, and skips rows whose date has no month.
 
 ### 2. Pull existing events from the TechEvents API
 

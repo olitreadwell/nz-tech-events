@@ -24,7 +24,8 @@ ruby scripts/pull_events.rb
 
 Fetches the current and future monthly tabs of the sheet, dedupes against the CSV by title + start_date, and appends only new rows (blank `TechEventsID`, `ai_updated=false`). Existing rows are never modified.
 
-- Tab GIDs are hardcoded in `scripts/pull_events.rb` — a new year's tabs must be added manually.
+- Tab GIDs are hardcoded in `SheetFetcher::TABS` in `scripts/pull_events.rb` — add new tabs by hand as the sheet grows (GIDs are in the sheet's public `htmlview` page source).
+- The sheet also keeps a whole-year tab (e.g. "2027") for events beyond the monthly tabs. It's listed with `month: nil`: the month is read from the date text, and rows whose date has no month are skipped with a warning (adding them would duplicate them on every run).
 - Safe to re-run any time; re-runs report "0 new" for unchanged tabs.
 
 ## 2. Pull existing events from the TechEvents API

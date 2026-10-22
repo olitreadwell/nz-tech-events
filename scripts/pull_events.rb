@@ -22,6 +22,7 @@ module SheetDateParser
   }.freeze
 
   # Parse a human-readable date string from the Google Sheet.
+  # tab_month is nil for a whole-year tab, where the month must appear in the text.
   # Returns { start_date: Date|nil, end_date: Date|nil, start_time: String|nil }
   def self.parse(raw, tab_year, tab_month)
     result = { start_date: nil, end_date: nil, start_time: nil }
@@ -54,6 +55,7 @@ module SheetDateParser
       end
     end
     month_num ||= tab_month
+    return result if month_num.nil?
 
     # Try cross-month date range: "31 Jul - 2 Aug"
     cross_month_match = text.match(/(\d{1,2})\s+(\w+)\s*[-–]\s*(\d{1,2})\s+(\w+)/i)
@@ -148,12 +150,26 @@ module SheetFetcher
     { name: "Oct 2026", gid: "559745448", year: 2026, month: 10 },
     { name: "Nov 2026", gid: "484297661", year: 2026, month: 11 },
     { name: "Dec 2026", gid: "1972914618", year: 2026, month: 12 },
+    { name: "Jan 2027", gid: "1452014449", year: 2027, month: 1 },
+    { name: "Feb 2027", gid: "1154928392", year: 2027, month: 2 },
+    { name: "Mar 2027", gid: "1735034357", year: 2027, month: 3 },
+    # Whole-year tab for events beyond the monthly tabs (month: nil)
+    { name: "2027", gid: "1663809046", year: 2027, month: nil },
   ].freeze
 
-  # Returns tabs from current month onward
-  def self.tabs_to_fetch
-    today = Date.today
-    TABS.select { |tab| Date.new(tab[:year], tab[:month], 1) >= Date.new(today.year, today.month, 1) }
+  def self.year_tab?(tab)
+    tab[:month].nil?
+  end
+
+  # Returns monthly tabs from the current month onward, plus year tabs for this year onward
+  def self.tabs_to_fetch(today = Date.today)
+    TABS.select do |tab|
+      if year_tab?(tab)
+        tab[:year] >= today.year
+      else
+        Date.new(tab[:year], tab[:month], 1) >= Date.new(today.year, today.month, 1)
+      end
+    end
   end
 
   # Fetch CSV data for a single tab. Returns array of hashes (one per row).
@@ -343,7 +359,10 @@ if __FILE__ == $PROGRAM_NAME
         event = EventBuilder.build(row)
         key = CsvManager.dedup_key(event["title"], event["start_date"])
 
-        if key.nil?
+        if key.nil? && SheetFetcher.year_tab?(tab)
+          # No month in the date - adding it would duplicate the row on every run
+          puts "\n  WARNING: Skipping '#{row[:title]}' from year tab - no parseable date (date: #{row[:date_raw]})"
+        elsif key.nil?
           puts "\n  WARNING: Could not generate key for '#{row[:title]}' (date: #{row[:date_raw]})"
           # Still add it - better to have it with no date than to lose it
           new_events << event

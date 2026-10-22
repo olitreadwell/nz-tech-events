@@ -101,6 +101,24 @@ class DateParserTest < Minitest::Test
     assert_equal Date.new(2026, 3, 18), result[:start_date]
     assert_nil result[:start_time]
   end
+
+# Year tab (no tab month): month must come from the cell text
+def test_year_tab_takes_month_from_text
+  result = SheetDateParser.parse("7th May", 2027, nil)
+  assert_equal Date.new(2027, 5, 7), result[:start_date]
+end
+
+def test_year_tab_range_takes_month_from_text
+  result = SheetDateParser.parse("16-17 Mar", 2027, nil)
+  assert_equal Date.new(2027, 3, 16), result[:start_date]
+  assert_equal Date.new(2027, 3, 17), result[:end_date]
+end
+
+def test_year_tab_without_month_returns_nil_date
+  assert_nil SheetDateParser.parse("15th, 6pm", 2027, nil)[:start_date]
+  assert_nil SheetDateParser.parse("16-17", 2027, nil)[:start_date]
+  assert_nil SheetDateParser.parse("TBC", 2027, nil)[:start_date]
+end
 end
 
 class RegionMapperTest < Minitest::Test
@@ -194,4 +212,46 @@ class CsvManagerTest < Minitest::Test
     assert_includes keys, "event b||2026-03-02"
     assert_equal 2, keys.size
   end
+end
+
+class SheetFetcherTabsTest < Minitest::Test
+  def test_monthly_tabs_are_consecutive_months
+    months = SheetFetcher::TABS.select { |t| t[:month] }.map { |t| Date.new(t[:year], t[:month], 1) }
+    months.each_cons(2) { |a, b| assert_equal a >> 1, b }
+  end
+
+  def test_tab_gids_are_unique
+    gids = SheetFetcher::TABS.map { |t| t[:gid] }
+    assert_equal gids.uniq, gids
+  end
+
+def test_tab_names_match_year_and_month
+  SheetFetcher::TABS.each do |t|
+    expected = t[:month] ? Date.new(t[:year], t[:month], 1).strftime("%b %Y") : t[:year].to_s
+    assert_equal expected, t[:name]
+  end
+end
+
+def test_tabs_cover_through_end_of_2027
+  covered = SheetFetcher::TABS.any? { |t| t[:year] == 2027 && t[:month].nil? } ||
+    SheetFetcher::TABS.any? { |t| t[:year] == 2027 && t[:month] == 12 }
+  assert covered, "expected a 2027 year tab or a Dec 2027 tab"
+end
+
+def test_tabs_to_fetch_includes_current_month_onward_and_year_tab
+  names = SheetFetcher.tabs_to_fetch(Date.new(2026, 10, 22)).map { |t| t[:name] }
+  assert_includes names, "Oct 2026"
+  assert_includes names, "2027"
+  refute_includes names, "Sep 2026"
+end
+
+def test_tabs_to_fetch_drops_year_tab_after_that_year
+  names = SheetFetcher.tabs_to_fetch(Date.new(2028, 1, 5)).map { |t| t[:name] }
+  refute_includes names, "2027"
+end
+
+def test_year_tab_predicate
+  assert SheetFetcher.year_tab?({ name: "2027", year: 2027, month: nil })
+  refute SheetFetcher.year_tab?({ name: "Jan 2027", year: 2027, month: 1 })
+end
 end
