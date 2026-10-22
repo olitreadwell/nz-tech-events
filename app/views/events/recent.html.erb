@@ -1,0 +1,21 @@
+<% content_for :title, "Recently Added Tech Events in New Zealand" %>
+
+<h1>Recently Added</h1>
+
+<%= render "filters", base_path: recent_events_path %>
+
+<% if @events_by_period.any? %>
+  <div class="events-list">
+    <% @events_by_period.each do |period, events| %>
+      <h2 class="month-separator"><%= added_period_label(period) %></h2>
+      <%= render partial: "event_card", collection: events, as: :event %>
+    <% end %>
+  </div>
+<% else %>
+  <div class="empty-state">
+    <h3>No events added in the last 30 days</h3>
+    <p><a href="<%= root_path %>">View all upcoming events</a></p>
+  </div>
+<% end %>
+
+<%= render "filter_script" %>

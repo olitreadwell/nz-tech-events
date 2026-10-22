@@ -12,6 +12,13 @@ class EventsController < ApplicationController
     @initial_city = params[:city] if params[:city].present?
   end
 
+  def recent
+    events = Event.recently_added.approved.includes(:user, :event_locations)
+    @events_by_period = events.group_by(&:added_period)
+    @initial_region = params[:region] if params[:region].present?
+    @initial_city = params[:city] if params[:city].present?
+  end
+
   def past
     events = Event.past.includes(:user, :event_locations).limit(100)
     @events_by_month = events.group_by { |e| e.start_date.beginning_of_month }

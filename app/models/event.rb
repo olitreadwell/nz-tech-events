@@ -21,6 +21,8 @@ class Event < ApplicationRecord
     awards: 8
   }, prefix: true
 
+  RECENTLY_ADDED_WINDOW = 30.days
+
   # Validations
   validates :title, presence: true, length: { maximum: 200 }
   validates :description, presence: true
@@ -36,6 +38,11 @@ class Event < ApplicationRecord
   # Scopes
   scope :upcoming, -> { where("start_date >= ?", Date.current).order(start_date: :asc, start_time: :asc) }
   scope :past, -> { where("start_date < ?", Date.current).order(start_date: :desc, start_time: :desc) }
+  scope :recently_added, -> {
+    where("start_date >= ?", Date.current)
+      .where(created_at: RECENTLY_ADDED_WINDOW.ago..)
+      .order(created_at: :desc)
+  }
   scope :approved, -> { where(approved: true) }
   scope :pending_approval, -> { where(approved: false) }
   scope :by_region, ->(region) {
@@ -69,6 +76,18 @@ class Event < ApplicationRecord
     return unless check_user
 
     ownership_requests.pending.find_by(requester: check_user)
+  end
+
+  # Which "Recently Added" section the event belongs in, by calendar week of creation
+  def added_period
+    this_week = Date.current.beginning_of_week.beginning_of_day
+    if created_at >= this_week
+      :this_week
+    elsif created_at >= this_week - 1.week
+      :last_week
+    else
+      :earlier
+    end
   end
 
   def multi_day?

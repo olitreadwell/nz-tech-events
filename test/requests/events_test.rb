@@ -47,6 +47,63 @@ class EventsTest < ActionDispatch::IntegrationTest
     assert_select ".event-card[data-title=?]", events(:approved_upcoming).title
   end
 
+  # ── RECENT (GET /recent) ──────────────────────────────────────────
+
+  test "recent renders successfully for anonymous user" do
+    get recent_events_path
+    assert_response :success
+    assert_select "h1", "Recently Added"
+    assert_select ".filters #filter-region"
+  end
+
+  test "recent shows approved upcoming events added in the last 30 days" do
+    events(:paid_event).update_columns(created_at: 31.days.ago)
+    get recent_events_path
+
+    assert_match events(:approved_upcoming).title, response.body
+    assert_no_match(/#{Regexp.escape(events(:paid_event).title)}/, response.body)
+    assert_no_match(/#{Regexp.escape(events(:unapproved_upcoming).title)}/, response.body)
+    assert_no_match(/#{Regexp.escape(events(:past_event).title)}/, response.body)
+  end
+
+  test "recent groups events into added this week, last week and 2-4 weeks ago" do
+    travel_to Time.zone.local(2026, 10, 22, 12, 0) do
+      Event.update_all(created_at: 2.months.ago, start_date: 1.month.from_now.to_date)
+      events(:approved_upcoming).update_columns(created_at: Time.zone.local(2026, 10, 21))
+      events(:free_event).update_columns(created_at: Time.zone.local(2026, 10, 14))
+      events(:paid_event).update_columns(created_at: Time.zone.local(2026, 10, 1))
+
+      get recent_events_path
+      assert_response :success
+
+      headings = css_select(".events-list h2").map { |h| h.text.strip }
+      assert_equal [ "Added this week", "Added last week", "Added 2-4 weeks ago" ], headings
+
+      titles = css_select(".events-list .event-card").map { |c| c["data-title"] }
+      assert_equal [ events(:approved_upcoming), events(:free_event), events(:paid_event) ].map(&:title), titles
+    end
+  end
+
+  test "recent shows empty state when nothing was added recently" do
+    Event.update_all(created_at: 2.months.ago)
+    get recent_events_path
+    assert_response :success
+    assert_match "No events added in the last 30 days", response.body
+  end
+
+  test "recent accepts region and city filters in the URL" do
+    get recent_events_city_path(region: "wellington", city: "wellington_cbd")
+    assert_response :success
+    assert_match "initialRegion: 'wellington'", response.body
+    assert_match "basePath: '/recent'", response.body
+  end
+
+  test "nav links to recently added" do
+    get root_path
+    assert_select ".nav-primary a[href=?]", recent_events_path, text: "Recently Added"
+    assert_select ".nav-menu .mobile-only a[href=?]", recent_events_path, text: "Recently Added"
+  end
+
   # ── PAST (GET /past) ──────────────────────────────────────────────
 
   test "past renders successfully for anonymous user" do

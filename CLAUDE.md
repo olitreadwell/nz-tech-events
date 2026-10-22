@@ -188,6 +188,7 @@ enum :region, {
 # Public
 root                    "events#index"     # Upcoming events
 GET  /past              events#past        # Past events
+GET  /recent            events#recent      # Upcoming events added in last 30 days, newest first
 GET  /events/:id        events#show        # Event detail
 
 # Auth - Email/Password

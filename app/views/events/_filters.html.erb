@@ -55,6 +55,7 @@
   window.filterConfig = {
     citiesByRegion: <%= cities_json %>,
     storageKey: 'nzTechEventsFilters',
+    basePath: '<%= local_assigns[:base_path] %>',
     initialRegion: '<%= @initial_region || '' %>',
     initialCity: '<%= @initial_city || '' %>'
   };

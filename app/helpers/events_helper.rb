@@ -63,6 +63,16 @@ module EventsHelper
     end
   end
 
+  ADDED_PERIOD_LABELS = {
+    this_week: "Added this week",
+    last_week: "Added last week",
+    earlier: "Added 2-4 weeks ago"
+  }.freeze
+
+  def added_period_label(period)
+    ADDED_PERIOD_LABELS.fetch(period)
+  end
+
   def event_type_badge_class(event_type)
     "badge badge-#{event_type}"
   end

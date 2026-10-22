@@ -319,6 +319,46 @@ class EventTest < ActiveSupport::TestCase
     assert_equal Event.all.count, Event.by_event_type(nil).count
   end
 
+  test "recently_added scope includes upcoming events added in the last 30 days, newest first" do
+    events(:approved_upcoming).update_columns(created_at: 2.days.ago)
+    events(:free_event).update_columns(created_at: 1.hour.ago)
+    events(:paid_event).update_columns(created_at: 29.days.ago)
+
+    expected = [ events(:free_event), events(:approved_upcoming), events(:paid_event) ].map(&:id)
+    assert_equal expected, Event.recently_added.ids & expected
+  end
+
+  test "recently_added scope excludes events added more than 30 days ago" do
+    events(:approved_upcoming).update_columns(created_at: 31.days.ago)
+    assert_not_includes Event.recently_added, events(:approved_upcoming)
+  end
+
+  test "recently_added scope excludes events that have already happened" do
+    assert_not_includes Event.recently_added, events(:past_event)
+  end
+
+  # ========== Instance Methods ==========
+
+  # -- added_period --
+
+  test "added_period groups by calendar week of creation" do
+    travel_to Time.zone.local(2026, 10, 22, 12, 0) do # Thursday
+      event = events(:approved_upcoming)
+
+      event.created_at = Time.zone.local(2026, 10, 19, 0, 1) # Monday this week
+      assert_equal :this_week, event.added_period
+
+      event.created_at = Time.zone.local(2026, 10, 18, 23, 59) # Sunday last week
+      assert_equal :last_week, event.added_period
+
+      event.created_at = Time.zone.local(2026, 10, 12, 0, 1) # Monday last week
+      assert_equal :last_week, event.added_period
+
+      event.created_at = Time.zone.local(2026, 10, 11, 23, 59) # Sunday two weeks ago
+      assert_equal :earlier, event.added_period
+    end
+  end
+
   # ========== Instance Methods ==========
 
   # -- owned_by? --

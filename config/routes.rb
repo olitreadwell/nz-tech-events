@@ -92,6 +92,13 @@ Rails.application.routes.draw do
   # Token management (web UI)
   resources :api_tokens, only: [ :index, :create, :destroy ]
 
+  # Recently added events, with the same region/city URL filters as the home page
+  get "recent", to: "events#recent", as: :recent_events
+  get "recent/:region/:city", to: "events#recent", as: :recent_events_city,
+      constraints: { region: /[a-z_]+/, city: /[a-z_]+/ }
+  get "recent/:region", to: "events#recent", as: :recent_events_region,
+      constraints: { region: /[a-z_]+/ }
+
   # Filtered event views (at the end to avoid conflicts with other routes)
   # URLs like /auckland or /wellington/Wellington%20CBD
   get ":region/:city", to: "events#index", as: :filtered_events_city,

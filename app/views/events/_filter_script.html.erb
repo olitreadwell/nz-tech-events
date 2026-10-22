@@ -6,6 +6,7 @@
     const STORAGE_KEY = window.filterConfig.storageKey;
     const initialRegion = window.filterConfig.initialRegion;
     const initialCity = window.filterConfig.initialCity;
+    const basePath = window.filterConfig.basePath || '';
 
     const regionSelect = document.getElementById('filter-region');
     const citySelect = document.getElementById('filter-city');
@@ -78,9 +79,9 @@
       const region = regionSelect.value;
       const city = citySelect.value;
 
-      let path = '/';
+      let path = basePath || '/';
       if (region) {
-        path = '/' + region;
+        path = basePath + '/' + region;
         if (city) {
           path += '/' + cityToSlug(city);
         }
@@ -143,12 +144,17 @@
         }
       });
 
-      // Show/hide month separators based on visible events
+      // Show/hide section separators based on visible events between them and the next separator
       monthSeparators.forEach(function(separator) {
-        const separatorMonth = separator.dataset.month;
-        const hasVisibleEvents = Array.from(eventCards).some(function(card) {
-          return card.dataset.month === separatorMonth && card.style.display !== 'none';
-        });
+        let hasVisibleEvents = false;
+        let el = separator.nextElementSibling;
+        while (el && !el.classList.contains('month-separator')) {
+          if (el.classList.contains('event-card') && el.style.display !== 'none') {
+            hasVisibleEvents = true;
+            break;
+          }
+          el = el.nextElementSibling;
+        }
         separator.style.display = hasVisibleEvents ? '' : 'none';
       });
 

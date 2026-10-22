@@ -456,8 +456,15 @@ details.dropdown>summary::after {
   font-size: 0.9rem;
 }
 
+/* Span the four dropdown columns, not the clear-filters column */
 .filters .filter-search {
-  grid-column: 1 / -1;
+  grid-column: 1 / 5;
+}
+
+/* Match the dropdowns' corners. Pico sets --pico-border-radius: 5rem on
+   [type=search] itself, so reset the variable back to Pico's default. */
+.filters .filter-search input[type="search"] {
+  --pico-border-radius: 0.25rem;
 }
 
 .filter-actions {
@@ -668,6 +675,7 @@ form small {
 .nav-primary li {
   margin: 0;
   padding: 0;
+  white-space: nowrap;
 }
 
 /* ========================================
@@ -799,6 +807,19 @@ form small {
 @media (max-width: 992px) {
   .filters {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  .filters .filter-search {
+    grid-column: 1 / -1;
+  }
+
+  /* Keep the primary nav on one line at tablet widths */
+  .brand {
+    font-size: 1.5rem;
+  }
+
+  .nav-primary {
+    gap: var(--space-sm);
   }
 }
 
