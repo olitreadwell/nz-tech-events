@@ -35,6 +35,18 @@ class EventsTest < ActionDispatch::IntegrationTest
     assert_match events(:multi_day_event).title, response.body
   end
 
+  test "index renders title search in the filter box" do
+    get root_path
+    assert_response :success
+    assert_select ".filters .filter-search input#filter-search[type=search]"
+  end
+
+  test "index event cards carry title for client-side search" do
+    get root_path
+    assert_response :success
+    assert_select ".event-card[data-title=?]", events(:approved_upcoming).title
+  end
+
   # ── PAST (GET /past) ──────────────────────────────────────────────
 
   test "past renders successfully for anonymous user" do

@@ -450,9 +450,14 @@ details.dropdown>summary::after {
   margin-bottom: var(--space-xs);
 }
 
-.filters select {
+.filters select,
+.filters input[type="search"] {
   margin-bottom: 0;
   font-size: 0.9rem;
+}
+
+.filters .filter-search {
+  grid-column: 1 / -1;
 }
 
 .filter-actions {

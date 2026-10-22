@@ -11,6 +11,7 @@
     const citySelect = document.getElementById('filter-city');
     const eventTypeSelect = document.getElementById('filter-event-type');
     const monthSelect = document.getElementById('filter-month');
+    const searchInput = document.getElementById('filter-search');
     const clearLink = document.getElementById('filter-clear');
     const noResultsMessage = document.getElementById('no-results-message');
     const eventCards = document.querySelectorAll('.event-card');
@@ -29,6 +30,20 @@
       if (!slug || !region) return '';
       const cities = citiesByRegion[region] || [];
       return cities.find(city => cityToSlug(city) === slug) || '';
+    }
+
+    // Lowercase and strip diacritics so "kapiti" matches "Kāpiti"
+    function normalizeText(text) {
+      return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    }
+
+    // Build a matcher that checks whether the query starts at the beginning of any word,
+    // e.g. "ral" matches "Tech Rally" but "ally" does not
+    function buildTitleMatcher(query) {
+      const normalized = normalizeText(query.trim());
+      if (!normalized) return null;
+      const escaped = normalized.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      return new RegExp('(^|[^\\p{L}\\p{N}])' + escaped, 'u');
     }
 
     // Load filters - URL params take priority, then localStorage
@@ -100,6 +115,8 @@
       const city = citySelect.value;
       const eventType = eventTypeSelect ? eventTypeSelect.value : '';
       const month = monthSelect ? monthSelect.value : '';
+      const search = searchInput ? searchInput.value.trim() : '';
+      const titleMatcher = buildTitleMatcher(search);
 
       let visibleCount = 0;
 
@@ -116,8 +133,9 @@
         const matchesCity = !city || cardCities.includes(city);
         const matchesEventType = !eventType || cardEventType === eventType;
         const matchesMonth = !month || cardMonth === month;
+        const matchesSearch = !titleMatcher || titleMatcher.test(normalizeText(card.dataset.title || ''));
 
-        if (matchesRegion && matchesCity && matchesEventType && matchesMonth) {
+        if (matchesRegion && matchesCity && matchesEventType && matchesMonth && matchesSearch) {
           card.style.display = '';
           visibleCount++;
         } else {
@@ -145,8 +163,8 @@
         }
       }
 
-      // Show/hide clear link (event type and month not included - they don't persist)
-      if (region || city || eventType || month) {
+      // Show/hide clear link
+      if (region || city || eventType || month || search) {
         clearLink.style.display = '';
       } else {
         clearLink.style.display = 'none';
@@ -164,6 +182,7 @@
       citySelect.value = '';
       if (eventTypeSelect) eventTypeSelect.value = '';
       if (monthSelect) monthSelect.value = '';
+      if (searchInput) searchInput.value = '';
       updateCityOptions('');
       applyFilters();
     };
@@ -187,6 +206,12 @@
     if (monthSelect) {
       monthSelect.onchange = function() {
         applyFilters(false); // Don't update URL for month
+      };
+    }
+
+    if (searchInput) {
+      searchInput.oninput = function() {
+        applyFilters(false); // Don't update URL for search
       };
     }
 
